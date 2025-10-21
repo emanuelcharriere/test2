@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Médicos | Administración</title>
+
+    <!-- CSS del proyecto -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <style>
+      .form-required::after {
+        content: " *";
+        color: var(--bs-danger);
+      }
+
+      .table thead th {
+        white-space: nowrap;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- ======================== NAV ======================== -->
+    <nav
+      class="navbar bg-light navbar-expand-lg sticky-top"
+      data-bs-theme="light"
+    >
+      <div class="container-fluid">
+        <!-- marca -->
+        <a
+          class="navbar-brand d-inline-flex align-items-center gap-2 m-0"
+          href="index.html"
+        >
+          <img src="img/logo.png" alt="Clínica Vita" class="logo-marca" />
+          <span class="d-none d-lg-inline fw-semibold text-primary"
+            >Clínica Vita</span
+          >
+        </a>
+
+        <!-- título centrado en mobile -->
+        <h1
+          class="position-absolute top-50 start-50 translate-middle d-lg-none fs-5 m-0 fw-bold text-primary"
+        >
+          Clínica Vita
+        </h1>
+
+        <!-- botón hamburguesa -->
+        <button
+          class="navbar-toggler ms-auto d-lg-none"
+          type="button"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#menuVita"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- menú en desktop -->
+        <ul
+          class="navbar-nav ms-auto d-none d-lg-flex align-items-lg-center gap-lg-3 m-0"
+        >
+          <li class="nav-item">
+            <a
+              class="nav-link active fw-semibold text-success"
+              href="index.html"
+              aria-current="page"
+              >Index</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-primary" href="institucional.html"
+              >Institucional</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-primary" href="contacto.html">Contacto</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-primary" href="faq.html">FAQ</a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link active fw-semibold text-success"
+              href="medicos.html"
+              aria-current="page"
+            >
+              <i class="bi bi-clipboard-plus"></i> Admin Médicos
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- ======================== OFFCANVAS (mobile/tablet) ======================== -->
+    <div
+      class="offcanvas offcanvas-end d-lg-none"
+      tabindex="-1"
+      id="menuVita"
+      data-bs-scroll="true"
+    >
+      <div class="offcanvas-header border-bottom">
+        <h2 class="offcanvas-title fs-6 fw-bold m-0">Menú</h2>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="offcanvas"
+        ></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a
+              class="nav-link text-primary"
+              href="index.html"
+              aria-current="page"
+              >Index</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-primary" href="institucional.html"
+              >Institucional</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-primary" href="contacto.html">Contacto</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-primary" href="faq.html">FAQ</a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link active fw-semibold text-success"
+              href="medicos.html"
+              ><i class="bi bi-clipboard-plus"></i>
+              Admin Médicos
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <main class="container my-4 pb-5">
+      <header class="d-flex align-items-center justify-content-between mb-3">
+        <h1 class="h4 m-0">Administración de Médicos</h1>
+        <div class="d-flex gap-2">
+          <button id="btnNuevo" class="btn btn-primary">
+            <span class="me-1">+</span> Nuevo médico
+          </button>
+          <button id="btnRestaurar" class="btn btn-outline-secondary">
+            Restaurar demo
+          </button>
+          <button id="btnVaciarLS" class="btn btn-outline-danger">
+            Vaciar LocalStorage
+          </button>
+        </div>
+      </header>
+
+      <div class="table-responsive">
+        <table class="table table-striped align-middle" id="tablaMedicos">
+          <thead class="table-light">
+            <tr>
+              <th>Foto</th>
+              <th>ID</th>
+              <th>Apellido y Nombre</th>
+              <th>Matrícula</th>
+              <th>Especialidad</th>
+              <th>Obras sociales</th>
+              <th>Honorarios</th>
+              <th class="text-end">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- render JS -->
+          </tbody>
+        </table>
+      </div>
+    </main>
+
+    <!-- Modal CRUD -->
+    <div class="modal fade" id="modalMedico" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+          <form id="formMedico" novalidate>
+            <div class="modal-header">
+              <h2 class="modal-title h5" id="modalTitle">Nuevo médico</h2>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Cerrar"
+              ></button>
+            </div>
+
+            <div class="modal-body">
+              <input type="hidden" id="medicoId" />
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label form-required" for="apellidoNombre"
+                    >Apellido y Nombre</label
+                  >
+                  <input
+                    type="text"
+                    id="apellidoNombre"
+                    class="form-control"
+                    required
+                  />
+                  <div class="invalid-feedback">
+                    Ingresá el nombre completo.
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <label class="form-label form-required" for="matricula"
+                    >Matrícula</label
+                  >
+                  <input
+                    type="text"
+                    id="matricula"
+                    class="form-control"
+                    required
+                    pattern="^[A-Za-z0-9\-\.]{3,}$"
+                  />
+                  <div class="invalid-feedback">Ej.: 12345 o ABC-123.</div>
+                </div>
+
+                <div class="col-md-3">
+                  <label class="form-label form-required" for="especialidad"
+                    >Especialidad</label
+                  >
+                  <select
+                    id="especialidad"
+                    class="form-select"
+                    required
+                  ></select>
+                  <div class="invalid-feedback">
+                    Seleccioná una especialidad.
+                  </div>
+                </div>
+
+                <div class="col-md-9">
+                  <label class="form-label form-required" for="foto"
+                    >URL de foto</label
+                  >
+                  <input
+                    type="text"
+                    id="foto"
+                    class="form-control"
+                    placeholder="img/medicos/nombre-apellido.jpg o https://…"
+                    required
+                  />
+                  <div class="invalid-feedback" id="fotoError">
+                    Ingresá una ruta como <code>img/…</code> o una URL
+                    http/https válida (jpg, jpeg, png, webp, gif).
+                  </div>
+                  <div class="form-text">
+                    Podés usar rutas relativas del proyecto o un link externo.
+                  </div>
+                </div>
+
+                <div class="col-md-3 d-flex align-items-end">
+                  <img
+                    id="fotoPreview"
+                    src="img/doctor-placeholder.jpg"
+                    alt="Preview"
+                    class="img-fluid rounded border w-100"
+                    style="max-height: 120px; object-fit: cover"
+                  />
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label" for="email">Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    class="form-control"
+                    placeholder="medico@ejemplo.com"
+                  />
+                  <div class="invalid-feedback">Email inválido.</div>
+                </div>
+
+                <div class="col-md-3">
+                  <label class="form-label" for="telefono">Teléfono</label>
+                  <input
+                    type="tel"
+                    id="telefono"
+                    class="form-control"
+                    placeholder="+54 11 5555-5555"
+                  />
+                </div>
+
+                <div class="col-md-3">
+                  <label class="form-label form-required" for="honorarios"
+                    >Honorarios ($)</label
+                  >
+                  <input
+                    type="number"
+                    id="honorarios"
+                    class="form-control"
+                    min="0"
+                    step="100"
+                    required
+                  />
+                  <div class="invalid-feedback">Ingresá un valor válido.</div>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label" for="obraSocial"
+                    >Obras Sociales</label
+                  >
+                  <select id="obraSocial" class="form-select" multiple></select>
+                  <div class="form-text">
+                    Podés seleccionar una o varias (Ctrl/Cmd + click).
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label" for="bio">Descripción breve</label>
+                  <textarea
+                    id="bio"
+                    class="form-control"
+                    rows="3"
+                    placeholder="Trayectoria, enfoque, etc."
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button
+                class="btn btn-secondary"
+                type="button"
+                data-bs-dismiss="modal"
+              >
+                Cancelar
+              </button>
+              <button id="btnGuardar" class="btn btn-primary" type="submit">
+                Guardar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- JS -->
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="js/data-medicos.js"></script>
+    <script type="module" src="js/admin-medicos.js"></script>
+  </body>
+</html>
