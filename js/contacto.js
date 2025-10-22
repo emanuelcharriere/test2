@@ -13,15 +13,31 @@ function contacto(event){
     let mensaje = inputMensaje.value.trim();
 
     if (!nombre || !correo || !asunto || !mensaje){
-        alert ('Por Favor completar los campos vacios');
+        alert ('Por Favor completá los campos vacios');
         return;
     }
-    alert('Su consulta fué enviada, responderemos a la brevedad');
 
-    formContacto.reset();
+    const nuevaConsulta = {
+        nombre: nombre,
+        correo: correo,
+        asunto: asunto,
+        mensaje: mensaje,
+        fecha: new Date().toISOString()
+    };
 
+    try {
+        const consultasGuardadas = localStorage.getItem('consultas');
+        let consultas = consultasGuardadas ? JSON.parse(consultasGuardadas) : [];
+        consultas.push(nuevaConsulta);
+        localStorage.setItem('consultas', JSON.stringify(consultas));
+
+        alert('Consulta enviada con exito');
+        formContacto.reset();
+    }
+    catch (error) {
+        console.error('Error al guardar en localStorage:', error);
+        alert('Hubo un error al intentar enviar su consulta.');
+    }
 };
 
-
-
-formContacto.addEventListener('submit', contacto)
+formContacto.addEventListener('submit', contacto);
